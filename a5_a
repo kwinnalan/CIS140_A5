@@ -1,0 +1,53 @@
+#!/bin/bash
+
+declare -a menuOptions
+declare -i choiceInt
+declare -ir NOT_MADE=0
+main() {
+	clear
+	setChoiceInt
+    populateMenuOptions
+	while [ $choiceInt -eq $NOT_MADE ]  ## http://stackoverflow.com/questions/2188199/how-to-use-double-or-single-bracket-parentheses-curly-braces
+	do
+        displayWelcome
+		displayMenu
+        getUsersMenuChoice
+	done
+	exit 0  ## https://askubuntu.com/questions/892604/meaning-of-exit-0-exit-1-and-exit-2-in-a-bash-script
+}
+
+setChoiceInt() {
+		choiceInt=0
+}
+
+populateMenuOptions(){
+        menuOptions=("Editing Commands" "Games" "User Administration" "Process Commands" "System Commands" "Network Commands")
+}
+
+displayWelcome(){
+echo -e "\n WELCOME TO THE MACHINE \n"
+}
+
+displayMenu(){
+declare -i menuOptionNumber
+for (( i=0; i < ${#menuOptions[@]}; i++ ))
+do
+        menuOptionNumber=($i+1)
+        echo -e "${menuOptionNumber}.) ${menuOptions[$i]}\n"
+done
+}
+
+getUsersMenuChoice(){
+while [ $choiceInt -eq $NOT_MADE ] || ["$choiceInt" -gt ${#menuOptions[@]}] 
+do
+    read -p "Please make a selection (1 - ${#menuOptions[@]}): " choiceInt
+
+    if [ "$choiceInt" -le 1 ] || [ "$choiceInt" -gt ${#menuOptions[@]} ]
+		    then
+			    echo -e "\nIncorrect input. Please try again\n"
+    fi
+done
+}
+main
+
+
