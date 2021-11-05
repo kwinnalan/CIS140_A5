@@ -38,15 +38,73 @@ done
 }
 
 getUsersMenuChoice(){
-while [ $choiceInt -eq $NOT_MADE ] || ["$choiceInt" -gt ${#menuOptions[@]}] 
+while [ $choiceInt -lt 1 ] || [ $choiceInt -gt ${#menuOptions[@]} ]
 do
     read -p "Please make a selection (1 - ${#menuOptions[@]}): " choiceInt
 
-    if [ "$choiceInt" -le 1 ] || [ "$choiceInt" -gt ${#menuOptions[@]} ]
+    if [ $choiceInt -lt 1 ] || [ $choiceInt -gt ${#menuOptions[@]} ]
+
 		    then
-			    echo -e "\nIncorrect input. Please try again\n"
+                    if [ $choiceInt -ne $NOT_MADE ]
+                    then
+			                echo -e "Incorrect input. Please try again\n"
+                    fi
+        
+    else 
+            processMenuChoice
     fi
 done
+}
+
+processMenuChoice(){
+    if [ $choiceInt -eq 1 ] 
+    then
+            openMenuChoiceOne
+    elif [ $choiceInt -eq 2 ] 
+    then
+            openMenuChoiceTwo
+    elif [ $choiceInt -eq 3 ] 
+    then
+            openMenuChoiceThree
+    elif [ $choiceInt -eq 4 ] 
+    then
+            openMenuChoiceFour
+    elif [ $choiceInt -eq 5 ] 
+    then
+            openMenuChoiceFive
+    else 
+            openMenuChoiceSix
+    fi
+}
+
+openMenuChoiceOne(){
+clear
+echo -e "MENU ONE"
+}
+
+openMenuChoiceTwo(){
+clear
+echo -e "MENU TWO"
+}
+
+openMenuChoiceThree(){
+clear
+echo -e "MENU THREE"
+}
+
+openMenuChoiceFour(){
+clear
+echo -e "MENU FOUR"
+}
+
+openMenuChoiceFive(){
+clear
+echo -e "MENU FIVE"
+}
+
+openMenuChoiceSix(){
+clear
+echo -e "MENU SIX"
 }
 main
 
