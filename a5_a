@@ -1,17 +1,29 @@
 #!/bin/bash
 
-declare -a menuOptions
+declare -a mainMenuOptions
+declare -a subMenuOneOptions
+declare -a subMenuTwoOptions
+declare -a subMenuThreeOptions
+declare -a subMenuFourOptions
+declare -a subMenuFiveOptions
+declare -a subMenuSixOptions
 declare -i choiceInt
 declare -ir NOT_MADE=0
 main() {
 	clear
 	setChoiceInt
-    populateMenuOptions
+    populateMainMenuOptions
+    populateSubMenuOneOptions
+    populateSubMenuTwoOptions
+    populateSubMenuThreeOptions
+    populateSubMenuFourOptions
+    populateSubMenuFiveOptions
+    populateSubMenuSixOptions
 	while [ $choiceInt -eq $NOT_MADE ]  ## http://stackoverflow.com/questions/2188199/how-to-use-double-or-single-bracket-parentheses-curly-braces
 	do
         displayWelcome
-		displayMenu
-        getUsersMenuChoice
+		displayMenu "${mainMenuOptions[@]}" 
+        getUsersMenuChoice "${mainMenuOptions[@]}" 
 	done
 	exit 0  ## https://askubuntu.com/questions/892604/meaning-of-exit-0-exit-1-and-exit-2-in-a-bash-script
 }
@@ -20,8 +32,32 @@ setChoiceInt() {
 		choiceInt=0
 }
 
-populateMenuOptions(){
-        menuOptions=("Editing Commands" "Games" "User Administration" "Process Commands" "System Commands" "Network Commands")
+populateMainMenuOptions(){
+        mainMenuOptions=("Editing Commands" "Games" "User Administration" "Process Commands" "System Commands" "Network Commands")
+}
+
+populateSubMenuOneOptions(){
+        subMenuOneOptions=("Insert" "Write" "Delete")
+}
+
+populateSubMenuTwoOptions(){
+        subMenuTwoOptions=("Insert" "Write" "Delete")
+}
+
+populateSubMenuThreeOptions(){
+        subMenuThreeOptions=("Insert" "Write" "Delete")
+}
+
+populateSubMenuFourOptions(){
+        subMenuFourOptions=("Insert" "Write" "Delete")
+}
+
+populateSubMenuFiveOptions(){
+        subMenuFiveOptions=("Insert" "Write" "Delete")
+}
+
+populateSubMenuSixOptions(){
+        subMenuSixOptions=("Insert" "Write" "Delete")
 }
 
 displayWelcome(){
@@ -30,6 +66,7 @@ echo -e "\n WELCOME TO THE MACHINE \n"
 
 displayMenu(){
 declare -i menuOptionNumber
+declare -a menuOptions=("$@")
 for (( i=0; i < ${#menuOptions[@]}; i++ ))
 do
         menuOptionNumber=($i+1)
@@ -38,11 +75,12 @@ done
 }
 
 getUsersMenuChoice(){
-while [ $choiceInt -lt 1 ] || [ $choiceInt -gt ${#menuOptions[@]} ]
+declare -a menuOptions=("$@")
+while [ $choiceInt -lt 1 ] || [ $choiceInt -gt "${#menuOptions[@]}" ]
 do
-    read -p "Please make a selection (1 - ${#menuOptions[@]}): " choiceInt
+    read -p "Please make a selection (1 - "${#menuOptions[@]}" ): " choiceInt
 
-    if [ $choiceInt -lt 1 ] || [ $choiceInt -gt ${#menuOptions[@]} ]
+    if [ $choiceInt -lt 1 ] || [ $choiceInt -gt "${#menuOptions[@]}" ]
 
 		    then
                     if [ $choiceInt -ne $NOT_MADE ]
@@ -51,15 +89,23 @@ do
                     fi
         
     else 
-            processMenuChoice
+            processMenuChoice "${menuOptions[@]}"
     fi
 done
 }
 
-processMenuChoice(){
-    if [ $choiceInt -eq 1 ] 
-    then
-            openMenuChoiceOne
+processMenuChoice(){ 
+#declare -a menuOptions=("$@")
+#declare -i menuOptionNumber
+#for (( i=0; i < ${#menuOptions[@]}; i++ ))
+#    do
+#      menuOptionNumber=i+1        
+#        if [ $choiceInt -eq $menuOptionNumber ] 
+#        then
+#            openMenuChoice "$menuOptions" "$menuOptionsNumber"
+if [ $choiceInt -eq 1 ]
+then
+        openMenuChoiceOne
     elif [ $choiceInt -eq 2 ] 
     then
             openMenuChoiceTwo
@@ -74,12 +120,16 @@ processMenuChoice(){
             openMenuChoiceFive
     else 
             openMenuChoiceSix
-    fi
+        fi
+    #done
 }
 
 openMenuChoiceOne(){
 clear
 echo -e "MENU ONE"
+displayMenu "${subMenuOneOptions[@]}" 
+setChoiceInt
+getUsersMenuChoice "${subMenuOneOptions[@]}" 
 }
 
 openMenuChoiceTwo(){
