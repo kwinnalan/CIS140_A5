@@ -1,0 +1,13 @@
+Johnson,Bill,45
+Davis,Julie,68
+Smith,John,45
+Dalco,Tom,51
+Sims,Tonya,38
+Hernandez,James,68
+Smith,John,51
+Jones,Sally,45
+Thompson,Joe,38
+Cushman,Jesse,51
+Banks,Sue,38
+Ingram,Todd,68
+Ingram,Isable,38

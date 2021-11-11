@@ -1,0 +1,51 @@
+#!/bin/bash
+#author: Kwinn Danforth
+#CIS 140 NCMC
+#Asignment 5 part B File I/O
+
+IFS=","
+
+declare inFile="$1"
+declare outFile="$2"
+declare -a lastNames
+declare -a firstNames
+declare -a ages
+
+main() {
+    readFile
+    counting "${ages[@]}"
+    exit 0
+}
+
+readFile() {
+    declare -i lineNumber=0
+
+    while read lastName firstName age
+    do
+        lastNames[$lineNumber]=$lastName
+        firstNames[$lineNumber]=$firstName
+        ages[$lineNumber]=$age
+        (( lineNumber++ ))
+    done < $inFile
+}
+
+
+counting(){
+declare -a ages=("$@")
+declare -i count=0
+declare -i retirementAge=65
+
+for (( i=0; i < ${#ages[@]}; i++ ))
+    do
+           
+            if [[ "${ages[i]}" > "($retirementAge - 1)" ]]
+                 
+                then
+                        count=$count+1
+                    echo "${lastNames[i]}, ${firstNames[i]}" >> $outFile
+            fi
+    done
+echo "Total Employees 65 y.o. and older: $count" >> $outFile
+}
+
+main

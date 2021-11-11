@@ -1,0 +1,90 @@
+#!/bin/bash
+
+## Author: Howard Bates (hbates@northmen.org)
+## Version: 10.10.2009.01
+## Purpose: BASH: file I/O, Pg. 187 of book: http://www.petoskeyschools.org/ncmc/resources/140/BASH/LinuxShellScriptingWithBash%282004%29.pdf
+
+IFS="," # http://mindspill.net/computing/linux-notes/using-the-bash-ifs-variable-to-make-for-loops-split-with-non-whitespace-characters/
+
+declare inFile="$1" # http://how-to.wikia.com/wiki/How_to_read_command_line_arguments_in_a_bash_script
+declare outFile="$2"
+declare -a lastNames
+declare -a firstNames
+declare -a ages
+declare -A people
+
+main() {
+    readFile
+    altReadFile
+    printLastNames
+    printMdArray
+    writeNewFile
+    exit 0
+}
+
+readFile() {
+    declare -i lineNumber=0
+    while read lastName firstName age
+    do
+        lastNames[$lineNumber]=$lastName
+        firstNames[$lineNumber]=$firstName
+        ages[$lineNumber]=$age
+        (( lineNumber++ ))
+    done < $inFile
+}
+
+altReadFile() {
+	# MD Arrays: http://stackoverflow.com/questions/16487258/how-to-declare-2d-array-in-bash
+	declare -i lineNumber=0
+	declare -ir ROWS=6
+	declare -ir COLUMNS=3
+	while read lastName firstName age
+	do
+		for (( i=0; i < ROWS; i++ )) {
+			for (( j=0; j < COLUMNS; j++ )) {
+				if [ $j -eq 0 ]
+				then
+					people[$i,$j]=$lastName
+				elif [ $j -eq 1 ]
+				then
+					people[$i,$j]=$firstName
+				else
+					people[$i,$j]=$age
+				fi
+			}
+		}
+		(( lineNumber++ ))
+	done < $inFile
+}
+
+printLastNames() {
+    for (( i=0; i < ${#lastNames[@]}; i++ )) # http://www.cyberciti.biz/faq/finding-bash-shell-array-length-elements
+    do
+        echo -e "${lastNames[i]}\n"
+    done
+}
+
+printMdArray() {
+	declare -ir ROWS=6
+	declare -ir COLUMNS=3
+	for (( i=0; i < ROWS; i++ )) {
+		for (( j=0; j < COLUMNS; j++ )) {
+			echo "${people[$i,$j]}"
+		}
+	}
+}
+
+writeNewFile() {
+     for (( i=0; i < ${#lastNames[@]}; i++ ))
+     do
+         echo ${lastNames[i]} >> $outFile
+     done
+}
+
+main
+
+
+
+
+
+
